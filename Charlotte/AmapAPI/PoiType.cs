@@ -45,8 +45,8 @@ namespace AmapAPITool.AmapAPI
         public Dictionary<string, PoiCategory> GetTypeByCategoryKeyword(string keyword)
         {
             Dictionary<string, PoiCategory> result = new Dictionary<string, PoiCategory>();
-            
-            foreach (KeyValuePair<string,PoiCategory> keyValuePair in _typeCategoryDict)
+
+            foreach (KeyValuePair<string, PoiCategory> keyValuePair in _typeCategoryDict)
             {
                 PoiCategory category = keyValuePair.Value;
                 if (category.BigCategory.Contains(keyword) || category.MidCategory.Contains(keyword) ||

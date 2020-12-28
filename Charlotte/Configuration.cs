@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Charlotte
 {
@@ -157,7 +155,7 @@ namespace Charlotte
             this.APIService = new AmapAPIService(appKey);
 
             RequestCountOfDateDict = new Dictionary<DateTime, int>();
-            
+
             if (RequestCountOfDateDict.ContainsKey(DateTime.Now.Date))
             {
                 RequestCountToday = RequestCountOfDateDict[DateTime.Now.Date];

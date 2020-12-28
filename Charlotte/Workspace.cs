@@ -13,7 +13,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 
@@ -326,7 +325,7 @@ namespace Charlotte
             {
                 return fetchButtonText;
             }
-            
+
             set
             {
                 if (fetchButtonText == value)
@@ -443,7 +442,7 @@ namespace Charlotte
             //    InitDatabase();
             //}
         }
-        
+
         /// <summary>
         /// Load Workspace from saved file
         /// </summary>
@@ -454,7 +453,7 @@ namespace Charlotte
         {
             string input = File.ReadAllText(path);
             string json = input;
-            
+
             if (json.Length < 2) // Not a valid saved Workspace
             {
                 throw new FailedWorkspaceFailException("Selected file is not a valid Workspace", false);
@@ -649,7 +648,7 @@ namespace Charlotte
                 {
                     string[] fields = new string[dataTable.Columns.Count];
                     bool hasValue = false;
-                    for (int column = 1; column <= dataTable.Columns.Count ; column++)
+                    for (int column = 1; column <= dataTable.Columns.Count; column++)
                     {
                         fields[column - 1] = (string)sheet.Cell(row, column).Value;
                         if (!String.IsNullOrEmpty((string)sheet.Cell(row, column).Value))
@@ -678,11 +677,13 @@ namespace Charlotte
         /// <returns>record count</returns>
         public int Export(string filename)
         {
-            if (!(filename.EndsWith(".txt") || filename.EndsWith(".csv") || filename.EndsWith(".xlsx"))) {
+            if (!(filename.EndsWith(".txt") || filename.EndsWith(".csv") || filename.EndsWith(".xlsx")))
+            {
                 throw new Exception("Target type not supported");
             }
 
-            if (filename.EndsWith(".txt") || filename.EndsWith(".csv")) { // .txt or .csv
+            if (filename.EndsWith(".txt") || filename.EndsWith(".csv"))
+            { // .txt or .csv
                 CurrentListAsPlainText(filename, filename.EndsWith(".csv") ? "," : "\t\t", filename.EndsWith(".csv"));
             }
             else // .xlsx
@@ -703,7 +704,7 @@ namespace Charlotte
             {
                 var worksheet = workbook.Worksheets.Add("POI");
 
-                for (int i=0; i<CurrentList.Count; i++)
+                for (int i = 0; i < CurrentList.Count; i++)
                 {
                     POI poi = CurrentList[i];
 
@@ -723,7 +724,7 @@ namespace Charlotte
                     for (int column = 1; column <= properties.Count; column++)
                     {
                         string value = properties[column - 1].Value;
-                        worksheet.Cell(i+2, column).SetValue<string>(value == null ? "null" : value);
+                        worksheet.Cell(i + 2, column).SetValue<string>(value == null ? "null" : value);
                     }
                 }
 
@@ -752,7 +753,7 @@ namespace Charlotte
 
                 if (firstLine) // Create header
                 {
-                    for (int i = 0; i<properties.Count; i++)
+                    for (int i = 0; i < properties.Count; i++)
                     {
                         string name = properties[i].Key;
                         result += name + (i < properties.Count - 1 ? separator : "\n");
@@ -783,7 +784,7 @@ namespace Charlotte
         {
             DataList.Clear();
             CurrentList = DataList;
-            
+
         }
 
         /// <summary>
@@ -881,11 +882,11 @@ namespace Charlotte
 
                 resultList.ForEach((Action<POI>)(poi =>
                 {
-                // Update displaylist in main thread
-                App.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        this.DataList.Add(poi);
-                    });
+                    // Update displaylist in main thread
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            this.DataList.Add(poi);
+                        });
                 }));
 
                 // TODO: Message when no data was fetched
@@ -895,10 +896,10 @@ namespace Charlotte
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
                     this.Processing = true;
-                //MaxPage = (int)Math.Ceiling((float)DataList.Count / (float)int.Parse(offset));
-                RecordPerPage = recordPerPage;
+                    //MaxPage = (int)Math.Ceiling((float)DataList.Count / (float)int.Parse(offset));
+                    RecordPerPage = recordPerPage;
                     CurrentPage = 1;
-                //RefreshDataPage();
+                    //RefreshDataPage();
                 });
             }
         }
@@ -919,7 +920,7 @@ namespace Charlotte
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while(config == null)
+            while (config == null)
             {
                 ProcessbarIndeterminate = true;
                 config = SelectConfig();

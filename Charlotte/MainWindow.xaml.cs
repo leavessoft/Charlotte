@@ -33,7 +33,7 @@ namespace Charlotte
                 _workspacePath = value;
 
                 // Change title according to opened file
-                titleLabel.Content = "Charlotte - " + (String.IsNullOrEmpty(value)?"New Workspace" : value.Substring(value.LastIndexOf('\\') + 1).Replace("_", "__"));
+                titleLabel.Content = "Charlotte - " + (String.IsNullOrEmpty(value) ? "New Workspace" : value.Substring(value.LastIndexOf('\\') + 1).Replace("_", "__"));
                 titleLabel.ToolTip = String.IsNullOrEmpty(value) ? "Path not specified" : value;
             }
         }
@@ -83,7 +83,7 @@ namespace Charlotte
             //workspace.ConfigurationList.Add(new Configuration("Test", "key111", "2020-12-02=1024", 2000, 3));
 
             //_ = new WelcomePage().ShowAsync();
-            
+
         }
 
 
@@ -113,7 +113,7 @@ namespace Charlotte
 
                 int workspaceFileCount = 0;
                 // Can have multiple files
-                for (int i=0; i<files.Length; i++)
+                for (int i = 0; i < files.Length; i++)
                 {
                     if (files[i].EndsWith(".clt"))
                     {
@@ -330,7 +330,7 @@ namespace Charlotte
         /// <returns></returns>
         private string AskPassword(string workspacePathText = "")
         {
-            DialogWindow dialog = DialogWindow.CreateConfirmCancelDialog(this, "Password for the workspace:" + (workspacePathText==""?"":"\n" + workspacePathText), "Password");
+            DialogWindow dialog = DialogWindow.CreateConfirmCancelDialog(this, "Password for the workspace:" + (workspacePathText == "" ? "" : "\n" + workspacePathText), "Password");
             dialog.PasswordBoxVisibility = Visibility.Visible;
             dialog.TextBoxVisibility = Visibility.Hidden;
             if (dialog.ShowDialog() == true)

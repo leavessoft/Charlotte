@@ -9,6 +9,6 @@ namespace Charlotte
     class ConfigurationList
     {
         List<Configuration> Configurations { get; set; }
-        
+
     }
 }

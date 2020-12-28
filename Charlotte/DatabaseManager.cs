@@ -19,7 +19,7 @@ namespace Charlotte
                 SQLiteConnection.CreateFile(filename);
             }
             conn = new SQLiteConnection($"Data Source={filename};Version=3;");
-            
+
             conn.Open();
         }
 

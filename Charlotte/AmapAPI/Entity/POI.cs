@@ -29,7 +29,7 @@ namespace AmapAPITool.AmapAPI.Entity
         public string tag { get; set; }
         public string biz_type { get; set; }
         //public List<POIPhoto> photos { get; set; }
-        
+
         /// <summary>
         /// Get the list of all properties of the POI entry
         /// </summary>
@@ -63,8 +63,10 @@ namespace AmapAPITool.AmapAPI.Entity
 
                     if (!string.IsNullOrEmpty(value))
                     {
-                        foreach (string s in keywords) {
-                            if (value.Contains(s)) {
+                        foreach (string s in keywords)
+                        {
+                            if (value.Contains(s))
+                            {
                                 matchCount++;
                             }
                         }

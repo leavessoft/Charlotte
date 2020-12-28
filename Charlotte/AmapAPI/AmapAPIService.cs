@@ -2,11 +2,11 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE', which is part of this source code package.
  */
+using AmapAPITool.AmapAPI.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using AmapAPITool.AmapAPI.Entity;
-using Newtonsoft.Json;
 
 namespace AmapAPITool.AmapAPI
 {
@@ -54,7 +54,7 @@ namespace AmapAPITool.AmapAPI
 
             return pois;
         }
-        
+
         public List<POI> SearchAroundPoi(string location, int radius, string type, int poiPerPage, int page, out int resultCount)
         {
             string responseContent = PreprocessNull(_webClient.DownloadString(AmapRestfulAPIUrlBuilder.GetQueryAroundUrl(_appKey, location, radius, type, poiPerPage, page)));

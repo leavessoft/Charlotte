@@ -42,7 +42,7 @@ namespace Charlotte
 
         private void OnClosed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
-            
+
         }
 
 

@@ -18,7 +18,7 @@ namespace Charlotte
             bool debug = Debugger.IsAttached;
             // Process unhandled exception
             DialogWindow.ShowMessage(
-                this.MainWindow, 
+                this.MainWindow,
                 e.Exception.Message + "\nWe are sorry for the inconvenience :("
                 + (debug ? "\nThe exception will NOT be checked in debug mode, press OK to continue." : "")
                 , "Oops..");

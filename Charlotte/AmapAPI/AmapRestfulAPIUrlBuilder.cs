@@ -8,7 +8,7 @@ namespace AmapAPITool.AmapAPI
     {
         public static string BaseUrl = "https://restapi.amap.com/v3/";
 
-        public static string GetQueryPoiUrl(string key, string keywords, string city, int offset, int page, 
+        public static string GetQueryPoiUrl(string key, string keywords, string city, int offset, int page,
             string extensions = "all", string output = "json")
         {
             string url = BaseUrl + "place/text?" +
@@ -17,12 +17,12 @@ namespace AmapAPITool.AmapAPI
                          $"offset={offset}&" +
                          $"page={page}&" +
                          $"extensions={extensions}&" +
-                         $"output={output}&" + 
+                         $"output={output}&" +
                          $"key={key}";
             return url;
         }
 
-        public static string GetQueryAroundUrl(string key, string location, int radius, string type, int offset, int page, 
+        public static string GetQueryAroundUrl(string key, string location, int radius, string type, int offset, int page,
             string extensions = "all", string output = "json")
         {
             string url = BaseUrl + "place/around?" +
@@ -32,7 +32,7 @@ namespace AmapAPITool.AmapAPI
                          $"offset={offset}&" +
                          $"page={page}&" +
                          $"extensions={extensions}&" +
-                         $"output={output}&" + 
+                         $"output={output}&" +
                          $"key={key}";
             return url;
         }

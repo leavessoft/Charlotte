@@ -243,12 +243,12 @@ namespace Charlotte
         public static DialogWindow CreateConfirmCancelDialog(Window parentWindow, string message, string title)
         {
             DialogWindow dialog = new DialogWindow(parentWindow)
-                                {
-                                    PrimaryButtonText = "Confirm",
-                                    SecondaryButtonText = "Cancel",
-                                    MessageText = message,
-                                    Title = title
-                                };
+            {
+                PrimaryButtonText = "Confirm",
+                SecondaryButtonText = "Cancel",
+                MessageText = message,
+                Title = title
+            };
             dialog.PrimaryButtonCall = primaryButtonCall;
             dialog.SecondaryButtonCall = secondaryButtonCall;
             return dialog;
@@ -276,7 +276,7 @@ namespace Charlotte
         {
             return inputContent;
         }
-        
+
         /// <summary>
         /// Store input content (if exists) before the window being destructed
         /// </summary>
