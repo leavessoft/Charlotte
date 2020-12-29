@@ -2,7 +2,7 @@
 
 *A **POI spider** as the final work for **GIS DevFdn course (2020 Fall)** .*
 
-![screenshot](C:\Users\Richard\source\repos\Charlotte\screenshot.jpg)
+![screenshot](screenshot.jpg)
 
 ## Function
 
