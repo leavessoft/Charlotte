@@ -57,7 +57,6 @@ namespace Charlotte
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = workspace;
             MouseDown += Window_MouseDown;
 
             WorkspacePath = null;
@@ -340,7 +339,8 @@ namespace Charlotte
                         {
                             // If this fail again, the user shoud start over by clicking Open again
                             // There are only two attempts for solely one click so far
-                            DialogWindow.ShowMessage(this, "Failed decrypting Workspace: wrong password or corrupted file.\nError message: " + ex2.Message, "Failed Loading Workspace");
+                            DialogWindow.ShowMessage(this, "Failed decrypting Workspace: wrong password or corrupted file.\n" +
+                                "Error message: " + ex2.Message, "Failed Loading Workspace");
                         }
                     }
                 }

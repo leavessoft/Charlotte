@@ -115,6 +115,7 @@ namespace Charlotte
                 }
                 else
                 {
+                    // TODO: Multithreading
                     FilteredList = SearchInDataList(value);
                     CurrentList = FilteredList;
                 }
@@ -784,7 +785,7 @@ namespace Charlotte
         {
             DataList.Clear();
             CurrentList = DataList;
-
+            RefreshPagination();
         }
 
         /// <summary>
@@ -930,7 +931,7 @@ namespace Charlotte
             }
             ProcessbarIndeterminate = false;
 
-            if (config != null) // redundant, unnecessary
+            if (config != null) // redundant: always non-null, but we'll leave it there anyway
             {
                 config.UpdateCount();
                 return config.APIService.SearchPoi(keyword, city, recordPerPage, page, out total);
@@ -945,7 +946,6 @@ namespace Charlotte
         /// </summary>
         private void RefreshDataPage()
         {
-            // TODO: Operate on Main Thread
             if (CurrentPage > 0 && CurrentPage <= MaxPage)
             {
                 DisplayList.Clear();
