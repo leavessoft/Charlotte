@@ -656,7 +656,7 @@ namespace Charlotte
                             hasValue = true;
                         }
                     }
-                    if (!hasValue)// empty row
+                    if (!hasValue) // empty row
                     {
                         break;
                     }
@@ -888,9 +888,6 @@ namespace Charlotte
                             this.DataList.Add(poi);
                         });
                 }));
-
-                // TODO: Message when no data was fetched
-
 
                 // Update displaylist in main thread
                 App.Current.Dispatcher.Invoke((Action)delegate

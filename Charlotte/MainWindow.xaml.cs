@@ -232,7 +232,35 @@ namespace Charlotte
                 try
                 {
                     int count = workspace.Export(path);
-                    DialogWindow.ShowMessage(this, $"Successfully exported {count} record(s) to: \n{path}", "Done");
+
+                    DialogWindow dialog = new DialogWindow(this)
+                    {
+                        PrimaryButtonText = "Done",
+                        SecondaryButtonText = "Open",
+                        MessageText = $"Successfully exported {count} record(s) to: \n{path}\n" +
+                                        "You can click `Open` to open it.",
+                        Title = "Finished"
+                    };
+                    dialog.SecondaryButtonCall = secondaryButtonCall;
+                    dialog.PrimaryButtonCall = primaryButtonCall;
+                    dialog.ShowDialog();
+
+                    bool primaryButtonCall()
+                    {
+                        dialog.DialogResult = true;
+                        dialog.Close();
+                        return true;
+                    };
+
+                    bool secondaryButtonCall()
+                    {
+                        // Open exported document with default application
+                        Process.Start(path);
+
+                        dialog.DialogResult = true;
+                        dialog.Close();
+                        return true;
+                    };
                 }
                 catch (Exception ex)
                 {
