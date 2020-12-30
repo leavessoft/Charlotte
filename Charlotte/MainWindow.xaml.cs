@@ -210,11 +210,15 @@ namespace Charlotte
                 return;
             }
 
-            string password = AskPassword();
-            if (!String.IsNullOrEmpty(password))
-            {
+            string password = AskPassword((String.IsNullOrEmpty(_workspacePath)?"New Workspace": _workspacePath), 
+                "Leave it empty to remove the password protection.");
+
+            // Fix: Cannot remove password protection
+            // We'll NOT check null/empty here
+            //if (!String.IsNullOrEmpty(password))
+            //{
                 workspace.ChangePassword(password);
-            }
+            //}
         }
 
 
@@ -356,9 +360,11 @@ namespace Charlotte
         /// Ask for password
         /// </summary>
         /// <returns></returns>
-        private string AskPassword(string workspacePathText = "")
+        private string AskPassword(string workspacePathText = "", string extraMessage = "")
         {
-            DialogWindow dialog = DialogWindow.CreateConfirmCancelDialog(this, "Password for the workspace:" + (workspacePathText == "" ? "" : "\n" + workspacePathText), "Password");
+            DialogWindow dialog = DialogWindow.CreateConfirmCancelDialog(this, "Password for the workspace:" + 
+                (workspacePathText == "" ? "" : "\n" + workspacePathText) + 
+                (extraMessage == "" ? "" : "\n" + extraMessage), "Password");
             dialog.PasswordBoxVisibility = Visibility.Visible;
             dialog.TextBoxVisibility = Visibility.Hidden;
             if (dialog.ShowDialog() == true)
