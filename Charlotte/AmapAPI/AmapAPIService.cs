@@ -6,13 +6,14 @@ using AmapAPITool.AmapAPI.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Text;
 
 namespace AmapAPITool.AmapAPI
 {
     public class AmapAPIService
     {
-        WebClient _webClient = new WebClient();
         private string _appKey;
 
         static JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
@@ -33,8 +34,9 @@ namespace AmapAPITool.AmapAPI
 
         public List<POI> SearchPoi(string keywords, string city, int poiPerPage, int page, out int resultCount)
         {
-            string responseContent = PreprocessNull(_webClient.DownloadString(AmapRestfulAPIUrlBuilder.GetQueryPoiUrl(_appKey, keywords, city, poiPerPage, page)));
-            POIQueryResponse responseObject = JsonConvert.DeserializeObject<POIQueryResponse>(responseContent, _jsonSerializerSettings);
+            string responseContent = PreprocessNull(HttpGet(AmapRestfulAPIUrlBuilder.GetQueryPoiUrl(_appKey, keywords, city, poiPerPage, page)));
+
+            POIQueryResponse responseObject = JsonConvert.DeserializeObject<POIQueryResponse>(responseContent);
             if (responseObject == null)
             {
                 throw new System.Exception("Failed parsing response");
@@ -57,7 +59,7 @@ namespace AmapAPITool.AmapAPI
 
         public List<POI> SearchAroundPoi(string location, int radius, string type, int poiPerPage, int page, out int resultCount)
         {
-            string responseContent = PreprocessNull(_webClient.DownloadString(AmapRestfulAPIUrlBuilder.GetQueryAroundUrl(_appKey, location, radius, type, poiPerPage, page)));
+            string responseContent = PreprocessNull(HttpGet(AmapRestfulAPIUrlBuilder.GetQueryAroundUrl(_appKey, location, radius, type, poiPerPage, page)));
             POIQueryResponse responseObject = JsonConvert.DeserializeObject<POIQueryResponse>(responseContent, _jsonSerializerSettings);
             if (responseObject == null)
             {
@@ -77,6 +79,24 @@ namespace AmapAPITool.AmapAPI
             });
 
             return pois;
+        }
+
+        private string HttpGet(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
+            request.Method = "GET";
+            request.Accept = "*/*";
+            request.Timeout = 15000;
+            request.AllowAutoRedirect = false;
+            WebResponse response = null;
+            string responseStr = null;
+            response = request.GetResponse();
+            if (response != null)
+            {
+                StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                responseStr = reader.ReadLine();
+            }
+            return responseStr;
         }
 
         private string PreprocessNull(string json)
