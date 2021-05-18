@@ -28,6 +28,31 @@ namespace AmapAPITool.AmapAPI.Entity
         public string location { get; set; }
         public string tag { get; set; }
         public string biz_type { get; set; }
+        public double? lat { get
+            {
+                string[] split = location.Split(',');
+                if (split.Length == 2)
+                {
+                    return double.Parse(split[0]);
+                } else
+                {
+                    return null;
+                }
+            }
+        }
+        public double? lon { get
+            {
+                string[] split = location.Split(',');
+                if (split.Length == 2)
+                {
+                    return double.Parse(split[1]);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
         //public List<POIPhoto> photos { get; set; }
 
         /// <summary>
