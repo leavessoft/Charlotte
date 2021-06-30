@@ -2,6 +2,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE', which is part of this source code package.
  */
+using Charlotte.AmapAPI.Entity;
 using System.Collections.Generic;
 
 namespace AmapAPITool.AmapAPI.Entity
@@ -28,6 +29,7 @@ namespace AmapAPITool.AmapAPI.Entity
         public string location { get; set; }
         public string tag { get; set; }
         public string biz_type { get; set; }
+        public POIBizExt biz_ext { get; set; }
         public double? _lat { get
             {
                 string[] split = location.Split(',');

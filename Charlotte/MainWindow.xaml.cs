@@ -310,6 +310,23 @@ namespace Charlotte
                 workspace.EmptyDataList();
             }
         }
+
+        
+        private void MenuClick_FillRating(object sender, RoutedEventArgs e)
+        {
+            if (workspace == null)
+            {
+                return;
+            }
+
+            DialogWindow dialog = DialogWindow.CreateConfirmCancelDialog(this, $"Fill `additional` fields with POI's rating?\nATTENTION: This will overwrite any existing data in this field and cannot be undone.", "Continue?");
+            dialog.PasswordBoxVisibility = Visibility.Hidden;
+            dialog.TextBoxVisibility = Visibility.Hidden;
+            if (dialog.ShowDialog() == true)
+            {
+                workspace.FillRating();
+            }
+        }
         #endregion
 
 

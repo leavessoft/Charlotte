@@ -990,6 +990,35 @@ namespace Charlotte
         }
 
         /// <summary>
+        /// Fill additional fields with ratings
+        /// </summary>
+        /// <param name="defaultValue">if the POI entity does not contain a rating, use this value</param>
+        public void FillRating(double defaultValue = 0)
+        {
+            foreach (POI poi in CurrentList)
+            {
+                try
+                {
+                    if (poi.biz_ext != null && poi.biz_ext.rating != null)
+                    {
+                        // Validation
+                        double.Parse(poi.biz_ext.rating);
+
+                        poi.additional = poi.biz_ext.rating;
+                    }
+                    else
+                    {
+                        throw new Exception("No biz_ext provided");
+                    }
+                }
+                catch
+                {
+                    poi.additional = defaultValue.ToString();
+                }
+            }
+        }
+
+        /// <summary>
         /// Capsuled POI search method of API service
         /// </summary>
         /// <param name="keyword"></param>
