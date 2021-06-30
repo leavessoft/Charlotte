@@ -2,7 +2,9 @@
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.Geoprocessor;
 using ESRI.ArcGIS.SpatialAnalystTools;
@@ -58,6 +60,10 @@ namespace Charlotte
 
         private void MapView_ResizeEnd(object sender, EventArgs e)
         {
+            axMapControl1.Width = this.Width - axMapControl1.Left - axTOCControl1.Left - 10;
+            axMapControl1.Height = this.Height - axMapControl1.Top - toolStripStatusLabel1.Height - 70;
+            axMapControl2.Top = axMapControl1.Top + axMapControl1.Height - axMapControl2.Height;
+            axTOCControl1.Height = axMapControl2.Top - axMapControl1.Top - 20;
         }
 
         private void MapView_SizeChanged(object sender, EventArgs e)
@@ -83,6 +89,48 @@ namespace Charlotte
             AddShapeFileToView(shapefilePath);
 
             targetFeaturePath = shapefilePath;
+        }
+
+        // MARK: - Zoom view
+
+        private void axMapControl2_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
+        {
+            IPoint point = new ESRI.ArcGIS.Geometry.Point();
+            point.PutCoords(e.mapX, e.mapY);
+            axMapControl1.CenterAt(point);
+
+            Console.WriteLine(axMapControl2.MapScale.ToString());
+        }
+
+        private IRgbColor GetColor(int r, int g, int b, int a)
+        {
+            IRgbColor rgbColor = new RgbColor();
+            rgbColor.Red = r;
+            rgbColor.Green = g;
+            rgbColor.Blue = b;
+            rgbColor.Transparency = (byte)a;
+            return rgbColor;
+        }
+
+        private void axMapControl1_OnExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnExtentUpdatedEvent e)
+        {
+
+            IEnvelope envelope = (IEnvelope)e.newEnvelope;
+            IGraphicsContainer graphicsContainer = axMapControl2.Map as IGraphicsContainer;
+            IActiveView activeView = graphicsContainer as IActiveView;
+            graphicsContainer.DeleteAllElements();
+            IElement element = new RectangleElement();
+            element.Geometry = envelope;
+            ILineSymbol outLineSymbol = new SimpleLineSymbol();
+            outLineSymbol.Width = 2;
+            outLineSymbol.Color = GetColor(0, 150, 200, 230);
+            IFillSymbol fillSymbol = new SimpleFillSymbol();
+            fillSymbol.Color = GetColor(9, 0, 0, 0);
+            fillSymbol.Outline = outLineSymbol;
+            IFillShapeElement fillShapeElement = element as IFillShapeElement;
+            fillShapeElement.Symbol = fillSymbol;
+            graphicsContainer.AddElement((IElement)fillShapeElement, 0);
+            activeView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
         }
 
 
@@ -317,5 +365,6 @@ namespace Charlotte
             toolStripStatusLabel1.Text = display;
         }
 
+        
     }
 }
