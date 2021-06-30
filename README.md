@@ -1,8 +1,8 @@
 # Charlotte
 
-*A **POI spider** as the final project for **GIS DevFdn course (2020 Fall)** .*
+*A **POI spider** as the final project for **GIS DevFdn course (2020 Fall) and GIS Software Engineering (2021 Spring)** .*
 
-![screenshot](screenshot.jpg)
+![screenshot](screenshot.png)
 
 ## Function
 
@@ -13,4 +13,5 @@
 - [x] Automatically managing usage of API keys
 - [x] Export/Import to/from `.txt`, `.csv`, `.xlsx`
 - [x] Workspace encryption which protects keys, fetched data, working state, etc.
+- [x] Implementation of ArcEngine for simple geoprocessing tasks
 
