@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ESRI.ArcGIS.DataSourcesFile;
+using ESRI.ArcGIS.Geodatabase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +11,15 @@ namespace Charlotte.Util
 {
     static class FileUtil
     {
+        private static void DeleteShpFile(string pathName, string fileName)
+        {
+            IWorkspaceFactory pWSF = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace pFWS = pWSF.OpenFromFile(pathName, 0) as IFeatureWorkspace;
+            IFeatureClass pFeatureClass = pFWS.OpenFeatureClass(fileName);
+            IDataset pFeatureDataset = pFeatureClass as IDataset;
+            pFeatureDataset.Delete();
+        }
+
         public static void ExtractFileNameFromFullPath(string fullPath, ref string directory, ref string fileName)
         {
             fullPath = fullPath.Replace('\\', '/');

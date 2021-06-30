@@ -26,7 +26,10 @@ namespace Charlotte
 
         Workspace workspace { get; set; }
 
-        String targetFeaturePath = null;
+        private string currentStatusText = "Ready";
+        private int currentStatusDisplayStartAtCharIndex = 0;
+
+        string targetFeaturePath = null;
 
         public MapView(Workspace workspace)
         {
@@ -46,16 +49,15 @@ namespace Charlotte
                 {
                     Thread.CurrentThread.IsBackground = true;
 
-                    toolStripStatusLabel1.Text = "Preparing POI shapefile, please wait...";
+                    currentStatusText = "Preparing POI shapefile, please wait...";
                     ExportPoiToTemp();
-                    toolStripStatusLabel1.Text = defaultStatusText;
+                    currentStatusText = defaultStatusText;
                 }).Start();
             }
         }
 
         private void MapView_ResizeEnd(object sender, EventArgs e)
         {
-        
         }
 
         private void MapView_SizeChanged(object sender, EventArgs e)
@@ -107,7 +109,21 @@ namespace Charlotte
             string input1 = FileUtil.SelectOpenPath("Select [Input] file", "Shapefile(.shp)|*.shp");
             string input2 = FileUtil.SelectOpenPath("Select [Overlay] file", "Shapefile(.shp)|*.shp");
             string output = FileUtil.SelectSavePath("Save as..", "Shapefile(.shp)|*.shp", "clip.shp");
-            Clip(new string[] { input2, input1 }, output);
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                currentStatusText = "Clip...";
+                try
+                {
+                    Clip(new string[] { input2, input1 }, output);
+                }
+                catch (Exception ex)
+                {
+                    ShowGeoprocessingError(ex);
+                }
+                currentStatusText = defaultStatusText;
+            }).Start(); 
         }
 
         private void intersectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,7 +132,21 @@ namespace Charlotte
             string input1 = FileUtil.SelectOpenPath("Select [Input] file", "Shapefile(.shp)|*.shp");
             string input2 = FileUtil.SelectOpenPath("Select [Overlay] file", "Shapefile(.shp)|*.shp");
             string output = FileUtil.SelectSavePath("Save as..", "Shapefile(.shp)|*.shp", "intersect.shp");
-            Intersect(new string[] { input2, input1 }, output);
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                currentStatusText = "Intersect...";
+                try
+                {
+                    Intersect(new string[] { input2, input1 }, output);
+                }
+                catch (Exception ex)
+                {
+                    ShowGeoprocessingError(ex);
+                }
+                currentStatusText = defaultStatusText;
+            }).Start();
         }
 
         private void krigingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -141,18 +171,55 @@ namespace Charlotte
                 }
             }
 
-            string tiffPath = "temp/kriging.tif";
-            Geoprocessor gp = new Geoprocessor();
-            Kriging kriging = new Kriging();
-            kriging.in_point_features = targetFeaturePath;
-            kriging.out_surface_raster = tiffPath;
-            kriging.z_field = "additional";
-            kriging.semiVariogram_props = "Spherical";
-            gp.Execute(kriging, null);
-            AddRasterToView(tiffPath);
+            try
+            {
+                string tiffPath = "temp/kriging.tif";
+                Geoprocessor gp = new Geoprocessor();
+                Kriging kriging = new Kriging();
+                kriging.in_point_features = targetFeaturePath;
+                kriging.out_surface_raster = tiffPath;
+                kriging.z_field = "additional";
+                kriging.semiVariogram_props = "Spherical";
+
+                // multi-threading will cause problem here
+                // do not attempt!!!
+
+                //new Thread(() =>
+                //{
+                //    Thread.CurrentThread.IsBackground = true;
+
+                currentStatusText = "Kriging...";
+                gp.Execute(kriging, null);
+                AddRasterToView(tiffPath);
+                currentStatusText = defaultStatusText;
+                //}).Start();
+            } 
+            catch (Exception ex)
+            {
+                ShowGeoprocessingError(ex);
+            }
         }
 
+
+        private void bufferToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new BufferDialog((input, output) =>
+            {
+                AddShapeFileToView(output);
+                AddShapeFileToView(input);
+                return true;
+            }, 
+            targetFeaturePath == null ? "" : targetFeaturePath,
+            "temp/buffer.shp").Show();
+        }
+
+
         // MARK: - Utils
+        private void ShowGeoprocessingError(Exception exception)
+        {
+            MessageBox.Show(this, "Failed executing geoprocessing: \n" + exception.ToString(), "Charlotte", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         IFeatureClass LoadFeatureClassFromPath(string path)
         {
             IWorkspaceFactory pWorkspaceFactory = new ShapefileWorkspaceFactory();
@@ -217,6 +284,37 @@ namespace Charlotte
             clip.out_feature_class = outputFilePath;
             geoprocessor.Execute(clip, null);
             AddShapeFileToView(outputFilePath);
+        }
+
+        private void statusBarTimer_Tick(object sender, EventArgs e)
+        {
+            int spaceLength = 6;
+            if (currentStatusText.Equals(defaultStatusText) || currentStatusDisplayStartAtCharIndex >= currentStatusText.Length - 1 + spaceLength)
+            {
+                currentStatusDisplayStartAtCharIndex = 0;
+            }
+            else
+            {
+                currentStatusDisplayStartAtCharIndex++;
+            }
+
+            UpdateStatusText(currentStatusText, currentStatusDisplayStartAtCharIndex, spaceLength);
+        }
+
+        private void UpdateStatusText(string fullText, int startAt, int spaceLength, int length = 25)
+        {
+            if (fullText.Equals(defaultStatusText))
+            {
+                toolStripStatusLabel1.Text = fullText;
+                return;
+            }
+
+            string repeated = fullText.PadRight(spaceLength + fullText.Length, ' ');
+            repeated = repeated + repeated + repeated + repeated;
+
+            string display = repeated.Substring(startAt, length);
+            
+            toolStripStatusLabel1.Text = display;
         }
 
     }

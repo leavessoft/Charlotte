@@ -29,36 +29,30 @@ namespace Charlotte
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapView));
-            this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.geoProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vectorOverlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.intersectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.krigingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
+            this.bufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
+            this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
+            this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
+            this.statusBarTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // axMapControl1
-            // 
-            this.axMapControl1.Location = new System.Drawing.Point(336, 85);
-            this.axMapControl1.Name = "axMapControl1";
-            this.axMapControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControl1.OcxState")));
-            this.axMapControl1.Size = new System.Drawing.Size(1160, 724);
-            this.axMapControl1.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -69,7 +63,7 @@ namespace Charlotte
             this.geoProcessingToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1508, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1508, 40);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -84,7 +78,7 @@ namespace Charlotte
             // addLayerToolStripMenuItem
             // 
             this.addLayerToolStripMenuItem.Name = "addLayerToolStripMenuItem";
-            this.addLayerToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.addLayerToolStripMenuItem.Size = new System.Drawing.Size(255, 44);
             this.addLayerToolStripMenuItem.Text = "Add Layer";
             this.addLayerToolStripMenuItem.Click += new System.EventHandler(this.addLayerToolStripMenuItem_Click);
             // 
@@ -92,7 +86,8 @@ namespace Charlotte
             // 
             this.geoProcessingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vectorOverlayToolStripMenuItem,
-            this.krigingToolStripMenuItem});
+            this.krigingToolStripMenuItem,
+            this.bufferToolStripMenuItem});
             this.geoProcessingToolStripMenuItem.Name = "geoProcessingToolStripMenuItem";
             this.geoProcessingToolStripMenuItem.Size = new System.Drawing.Size(191, 36);
             this.geoProcessingToolStripMenuItem.Text = "GeoProcessing";
@@ -100,40 +95,31 @@ namespace Charlotte
             // vectorOverlayToolStripMenuItem
             // 
             this.vectorOverlayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clipToolStripMenuItem,
             this.intersectToolStripMenuItem});
             this.vectorOverlayToolStripMenuItem.Name = "vectorOverlayToolStripMenuItem";
-            this.vectorOverlayToolStripMenuItem.Size = new System.Drawing.Size(304, 44);
+            this.vectorOverlayToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
             this.vectorOverlayToolStripMenuItem.Text = "Vector Overlay";
-            // 
-            // clipToolStripMenuItem
-            // 
-            this.clipToolStripMenuItem.Name = "clipToolStripMenuItem";
-            this.clipToolStripMenuItem.Size = new System.Drawing.Size(240, 44);
-            this.clipToolStripMenuItem.Text = "Clip";
-            this.clipToolStripMenuItem.Click += new System.EventHandler(this.clipToolStripMenuItem_Click);
             // 
             // intersectToolStripMenuItem
             // 
             this.intersectToolStripMenuItem.Name = "intersectToolStripMenuItem";
-            this.intersectToolStripMenuItem.Size = new System.Drawing.Size(240, 44);
+            this.intersectToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
             this.intersectToolStripMenuItem.Text = "Intersect";
             this.intersectToolStripMenuItem.Click += new System.EventHandler(this.intersectToolStripMenuItem_Click);
             // 
             // krigingToolStripMenuItem
             // 
             this.krigingToolStripMenuItem.Name = "krigingToolStripMenuItem";
-            this.krigingToolStripMenuItem.Size = new System.Drawing.Size(304, 44);
+            this.krigingToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
             this.krigingToolStripMenuItem.Text = "Kriging";
             this.krigingToolStripMenuItem.Click += new System.EventHandler(this.krigingToolStripMenuItem_Click);
             // 
-            // axTOCControl1
+            // bufferToolStripMenuItem
             // 
-            this.axTOCControl1.Location = new System.Drawing.Point(12, 85);
-            this.axTOCControl1.Name = "axTOCControl1";
-            this.axTOCControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl1.OcxState")));
-            this.axTOCControl1.Size = new System.Drawing.Size(318, 724);
-            this.axTOCControl1.TabIndex = 4;
+            this.bufferToolStripMenuItem.Name = "bufferToolStripMenuItem";
+            this.bufferToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.bufferToolStripMenuItem.Text = "Buffer";
+            this.bufferToolStripMenuItem.Click += new System.EventHandler(this.bufferToolStripMenuItem_Click);
             // 
             // axToolbarControl1
             // 
@@ -169,6 +155,28 @@ namespace Charlotte
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(79, 32);
             this.toolStripStatusLabel1.Text = "Ready";
             // 
+            // axTOCControl1
+            // 
+            this.axTOCControl1.Location = new System.Drawing.Point(12, 85);
+            this.axTOCControl1.Name = "axTOCControl1";
+            this.axTOCControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl1.OcxState")));
+            this.axTOCControl1.Size = new System.Drawing.Size(318, 724);
+            this.axTOCControl1.TabIndex = 4;
+            // 
+            // axMapControl1
+            // 
+            this.axMapControl1.Location = new System.Drawing.Point(336, 85);
+            this.axMapControl1.Name = "axMapControl1";
+            this.axMapControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControl1.OcxState")));
+            this.axMapControl1.Size = new System.Drawing.Size(1160, 724);
+            this.axMapControl1.TabIndex = 1;
+            // 
+            // statusBarTimer
+            // 
+            this.statusBarTimer.Enabled = true;
+            this.statusBarTimer.Interval = 200;
+            this.statusBarTimer.Tick += new System.EventHandler(this.statusBarTimer_Tick);
+            // 
             // MapView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -186,14 +194,14 @@ namespace Charlotte
             this.Load += new System.EventHandler(this.MapView_Load);
             this.ResizeEnd += new System.EventHandler(this.MapView_ResizeEnd);
             this.SizeChanged += new System.EventHandler(this.MapView_SizeChanged);
-            ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,7 +215,6 @@ namespace Charlotte
         private System.Windows.Forms.ToolStripMenuItem addLayerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem geoProcessingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vectorOverlayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clipToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem intersectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem krigingToolStripMenuItem;
         private ESRI.ArcGIS.Controls.AxTOCControl axTOCControl1;
@@ -215,5 +222,7 @@ namespace Charlotte
         private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Timer statusBarTimer;
+        private System.Windows.Forms.ToolStripMenuItem bufferToolStripMenuItem;
     }
 }
