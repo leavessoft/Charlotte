@@ -2,6 +2,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE', which is part of this source code package.
  */
+using ESRI.ArcGIS.Controls;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel;
@@ -18,7 +19,9 @@ namespace Charlotte
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly static string SupportedInExportFilter = "Plain text(*.txt)|*.txt|Comma Separated(*.csv)|*.csv|Microsoft Excel(*.xlsx)|*.xlsx";
+        
+
+        readonly static string SupportedInExportFilter = "Plain text(*.txt)|*.txt|Comma Separated(*.csv)|*.csv|ESRI Shapefile(*.shp)|*.shp|Microsoft Excel(*.xlsx)|*.xlsx";
 
         string _workspacePath;
         string WorkspacePath
@@ -39,6 +42,7 @@ namespace Charlotte
         }
 
         private Workspace workspace;
+
         public Workspace Workspace
         {
             get { return workspace; }
@@ -57,6 +61,11 @@ namespace Charlotte
         public MainWindow()
         {
             InitializeComponent();
+
+            // ESRI License
+            ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+
             MouseDown += Window_MouseDown;
 
             WorkspacePath = null;
@@ -232,8 +241,8 @@ namespace Charlotte
             string path;
             if ((path = SelectSavePath("Export", SupportedInExportFilter, "POI")) != null)
             {
-                try
-                {
+                //try
+                //{
                     int count = workspace.Export(path);
 
                     DialogWindow dialog = new DialogWindow(this)
@@ -264,11 +273,11 @@ namespace Charlotte
                         dialog.Close();
                         return true;
                     };
-                }
-                catch (Exception ex)
-                {
-                    DialogWindow.ShowMessage(this, "Cannot finish exporting because an error occured: \n" + ex.Message, "Failed");
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    DialogWindow.ShowMessage(this, "Cannot finish exporting because an error occured: \n" + ex.Message, "Failed");
+                //}
             }
         }
 
@@ -433,6 +442,14 @@ namespace Charlotte
         private void Command_Search(object sender, ExecutedRoutedEventArgs e)
         {
             searchBox.Focus();
+        }
+
+        private void View_Map(object sender, RoutedEventArgs e)
+        {
+            if (workspace != null)
+            {
+                new MapView(workspace).Show();
+            }
         }
         #endregion
 

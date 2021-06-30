@@ -5,6 +5,8 @@
 using AmapAPITool.AmapAPI.Entity;
 using Charlotte.Util;
 using ClosedXML.Excel;
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -672,13 +674,13 @@ namespace Charlotte
         #region Export
         /// <summary>
         /// Supported export file type:
-        /// .txt; .csv; .xlsx
+        /// .txt; .csv; .xlsx; .shp
         /// </summary>
         /// <param name="filename">must contain a supported extension</param>
         /// <returns>record count</returns>
         public int Export(string filename)
         {
-            if (!(filename.EndsWith(".txt") || filename.EndsWith(".csv") || filename.EndsWith(".xlsx")))
+            if (!(filename.EndsWith(".txt") || filename.EndsWith(".csv") || filename.EndsWith(".xlsx") || filename.EndsWith(".shp")))
             {
                 throw new Exception("Target type not supported");
             }
@@ -687,12 +689,97 @@ namespace Charlotte
             { // .txt or .csv
                 CurrentListAsPlainText(filename, filename.EndsWith(".csv") ? "," : "\t\t", filename.EndsWith(".csv"));
             }
+            else if (filename.EndsWith(".shp"))
+            { // .shp
+                CurrentListAsShapefile(filename);
+            }
             else // .xlsx
             {
                 CurrentListAsExcel(filename);
             }
 
             return CurrentList.Count;
+        }
+
+        /// <summary>
+        /// Export CurrentList to .shp
+        /// </summary>
+        /// <param name="path">path to target shapefile</param>
+        private void CurrentListAsShapefile(string path)
+        {
+            if (CurrentList.Count == 0)
+            {
+                throw new Exception("Current list is empty.");
+            }
+
+            // Create fields
+            List<Field> fields = new List<Field>();
+            List<KeyValuePair<string, string>> properties = CurrentList[0].GetPropertyList();
+            int additionalFieldColumnIndexShapefile = 0;
+            for (int column = 1; column <= properties.Count; column++) // 
+            {
+                string name = properties[column - 1].Key;
+                int length;
+                if (name == "additional")
+                {
+                    additionalFieldColumnIndexShapefile = column + 1;
+                    length = 16;
+                }
+                else
+                {
+                    length = 100;
+                }
+                fields.Add(GeoHelper.CreateField(name, name == "additional" ? esriFieldType.esriFieldTypeDouble : esriFieldType.esriFieldTypeString, length));
+            }
+
+            // Create spatial reference
+            ISpatialReferenceFactory srFactory = new SpatialReferenceEnvironment();
+            SpatialReferenceEnvironment pSpatialReferenceEnv = default(SpatialReferenceEnvironment);
+            ISpatialReference2 pSpatialReference = default(ISpatialReference2);
+            //IGeographicCoordinateSystem cs = srFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+
+            // Add data
+            string filePath = "";
+            string fileName = "";
+            FileUtil.ExtractFileNameFromFullPath(path, ref filePath, ref fileName);
+            GeoHelper.CreateShpFile(filePath, fileName, fields.ToArray(), pSpatialReference, (featureClass) =>
+            {
+                for (int i = 0; i < CurrentList.Count; i++)
+                {
+                    POI poi = CurrentList[i];
+
+                    List<KeyValuePair<string, string>> _properties = poi.GetPropertyList();
+
+                    IPoint point = new ESRI.ArcGIS.Geometry.Point();
+                    point.X = poi._lon ?? 0;
+                    point.Y = poi._lat ?? 0;
+
+                    IFeature feature = featureClass.CreateFeature();
+                    feature.Shape = point;
+
+                    // Attributes table record column index starts at 2
+                    for (int column = 2; column <= _properties.Count + 1; column++) // 
+                    {
+                        string value = _properties[column - 2].Value;
+                        if (additionalFieldColumnIndexShapefile == column)
+                        {
+                            if (value == null)
+                            {
+                                value = "0";
+                            }
+                            feature.set_Value(column, double.Parse(value));
+                        }
+                        else
+                        {
+                            feature.set_Value(column, value);
+                        }
+                    }
+
+                    feature.Store();
+                }
+
+                return true;
+            });
         }
 
         /// <summary>

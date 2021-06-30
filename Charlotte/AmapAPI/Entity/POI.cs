@@ -28,24 +28,24 @@ namespace AmapAPITool.AmapAPI.Entity
         public string location { get; set; }
         public string tag { get; set; }
         public string biz_type { get; set; }
-        public double? lat { get
+        public double? _lat { get
             {
                 string[] split = location.Split(',');
                 if (split.Length == 2)
                 {
-                    return double.Parse(split[0]);
+                    return double.Parse(split[1]);
                 } else
                 {
                     return null;
                 }
             }
         }
-        public double? lon { get
+        public double? _lon { get
             {
                 string[] split = location.Split(',');
                 if (split.Length == 2)
                 {
-                    return double.Parse(split[1]);
+                    return double.Parse(split[0]);
                 }
                 else
                 {
@@ -53,6 +53,8 @@ namespace AmapAPITool.AmapAPI.Entity
                 }
             }
         }
+        public string additional { get; set; }
+        //public string additional_data_type { get; set; }
         //public List<POIPhoto> photos { get; set; }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace AmapAPITool.AmapAPI.Entity
             List<KeyValuePair<string, string>> propDict = new List<KeyValuePair<string, string>>();
             foreach (var prop in this.GetType().GetProperties())
             {
-                if (prop.PropertyType == typeof(string))
+                if (prop.PropertyType == typeof(string) && !prop.Name.StartsWith("_"))
                 {
                     propDict.Add(new KeyValuePair<string, string>(prop.Name, (string)prop.GetValue(this)));
                 }
@@ -90,6 +92,20 @@ namespace AmapAPITool.AmapAPI.Entity
                     {
                         foreach (string s in keywords)
                         {
+                            // Excluding
+                            if (s.StartsWith("-") && s.Length > 1)
+                            {
+                                if (value.Contains(s.Substring(1)))
+                                {
+                                    return false;
+                                }
+                                else
+                                {
+                                    matchCount++;
+                                }
+                            }
+
+                            // Including
                             if (value.Contains(s))
                             {
                                 matchCount++;
@@ -106,5 +122,12 @@ namespace AmapAPITool.AmapAPI.Entity
 
             return false;
         }
+    }
+
+    enum AdditionalFieldType
+    {
+        String,
+        Double,
+        Int
     }
 }
